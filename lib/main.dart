@@ -102,6 +102,7 @@ class FormList extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   child: TextFormField(
@@ -141,6 +142,7 @@ class FormList extends StatelessWidget {
             const SizedBox(height: 24),
 
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   child: TextFormField(
