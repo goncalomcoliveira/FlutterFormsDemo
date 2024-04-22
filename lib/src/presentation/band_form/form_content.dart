@@ -15,52 +15,62 @@ class FormContent extends StatelessWidget {
     return Expanded(
       child: Form(
         key: appState.bandFormKey,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    initialValue: appState.name,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.person),
-                      hintText: 'Band Name',
-                      labelText: 'Name *',
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a name';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      appState.name = value!;
-                    },
+        child: FutureBuilder(
+          future: appState.fetchBand(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            else {
+              return ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          initialValue: appState.band.name,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.person),
+                            hintText: 'Band Name',
+                            labelText: 'Name *',
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a name';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            appState.band.name = value!;
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
 
-            const SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
-            const Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                RadioExample(),
-              ],
-            ),
+                  const Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      RadioExample(),
+                    ],
+                  ),
 
-            const SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
-            const Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CheckboxExample(),
-              ],
-            ),
-          ],
+                  const Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CheckboxExample(),
+                    ],
+                  ),
+                ],
+              );
+            }
+          }
         ),
       ),
     );

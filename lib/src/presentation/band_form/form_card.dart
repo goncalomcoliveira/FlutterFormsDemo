@@ -29,6 +29,13 @@ class FormCard extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Processing Data')),
                   );
+                  appState.saveData().whenComplete(() {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Data Saved'))
+                      );
+                    }
+                  );
                 }
               },
               child: const Text('Submit'),

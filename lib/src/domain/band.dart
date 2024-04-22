@@ -6,7 +6,7 @@ class Band {
   final int id;
 
   @ColumnInfo(name: 'name')
-  final String name;
+  String name;
 
   Band(this.id, this.name);
 }

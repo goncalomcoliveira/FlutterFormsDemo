@@ -7,21 +7,21 @@ part of 'band_db.dart';
 // **************************************************************************
 
 // ignore: avoid_classes_with_only_static_members
-class $FloorAppDatabase {
+class $FloorBandDatabase {
   /// Creates a database builder for a persistent database.
   /// Once a database is built, you should keep a reference to it and re-use it.
-  static _$AppDatabaseBuilder databaseBuilder(String name) =>
-      _$AppDatabaseBuilder(name);
+  static _$BandDatabaseBuilder databaseBuilder(String name) =>
+      _$BandDatabaseBuilder(name);
 
   /// Creates a database builder for an in memory database.
   /// Information stored in an in memory database disappears when the process is killed.
   /// Once a database is built, you should keep a reference to it and re-use it.
-  static _$AppDatabaseBuilder inMemoryDatabaseBuilder() =>
-      _$AppDatabaseBuilder(null);
+  static _$BandDatabaseBuilder inMemoryDatabaseBuilder() =>
+      _$BandDatabaseBuilder(null);
 }
 
-class _$AppDatabaseBuilder {
-  _$AppDatabaseBuilder(this.name);
+class _$BandDatabaseBuilder {
+  _$BandDatabaseBuilder(this.name);
 
   final String? name;
 
@@ -30,23 +30,23 @@ class _$AppDatabaseBuilder {
   Callback? _callback;
 
   /// Adds migrations to the builder.
-  _$AppDatabaseBuilder addMigrations(List<Migration> migrations) {
+  _$BandDatabaseBuilder addMigrations(List<Migration> migrations) {
     _migrations.addAll(migrations);
     return this;
   }
 
   /// Adds a database [Callback] to the builder.
-  _$AppDatabaseBuilder addCallback(Callback callback) {
+  _$BandDatabaseBuilder addCallback(Callback callback) {
     _callback = callback;
     return this;
   }
 
   /// Creates the database and initializes it.
-  Future<AppDatabase> build() async {
+  Future<BandDatabase> build() async {
     final path = name != null
         ? await sqfliteDatabaseFactory.getDatabasePath(name!)
         : ':memory:';
-    final database = _$AppDatabase();
+    final database = _$BandDatabase();
     database.database = await database.open(
       path,
       _migrations,
@@ -56,8 +56,8 @@ class _$AppDatabaseBuilder {
   }
 }
 
-class _$AppDatabase extends AppDatabase {
-  _$AppDatabase([StreamController<String>? listener]) {
+class _$BandDatabase extends BandDatabase {
+  _$BandDatabase([StreamController<String>? listener]) {
     changeListener = listener ?? StreamController<String>.broadcast();
   }
 
@@ -108,6 +108,12 @@ class _$BandDao extends BandDao {
             database,
             'Band',
             (Band item) => <String, Object?>{'id': item.id, 'name': item.name},
+            changeListener),
+        _bandUpdateAdapter = UpdateAdapter(
+            database,
+            'Band',
+            ['id'],
+            (Band item) => <String, Object?>{'id': item.id, 'name': item.name},
             changeListener);
 
   final sqflite.DatabaseExecutor database;
@@ -118,33 +124,32 @@ class _$BandDao extends BandDao {
 
   final InsertionAdapter<Band> _bandInsertionAdapter;
 
+  final UpdateAdapter<Band> _bandUpdateAdapter;
+
   @override
-  Future<List<Band>> findAllPeople() async {
-    return _queryAdapter.queryList('SELECT * FROM Person',
+  Future<List<Band>> findAllBands() async {
+    return _queryAdapter.queryList('SELECT * FROM Band',
         mapper: (Map<String, Object?> row) =>
             Band(row['id'] as int, row['name'] as String));
   }
 
   @override
-  Stream<List<String>> findAllPeopleName() {
-    return _queryAdapter.queryListStream('SELECT name FROM Person',
-        mapper: (Map<String, Object?> row) => row.values.first as String,
-        queryableName: 'Person',
-        isView: false);
-  }
-
-  @override
-  Stream<Band?> findPersonById(int id) {
-    return _queryAdapter.queryStream('SELECT * FROM Person WHERE id = ?1',
+  Stream<Band?> findBandById(int id) {
+    return _queryAdapter.queryStream('SELECT * FROM Band WHERE id = ?1',
         mapper: (Map<String, Object?> row) =>
             Band(row['id'] as int, row['name'] as String),
         arguments: [id],
-        queryableName: 'Person',
+        queryableName: 'Band',
         isView: false);
   }
 
   @override
-  Future<void> insertPerson(Band person) async {
-    await _bandInsertionAdapter.insert(person, OnConflictStrategy.abort);
+  Future<void> insertBand(Band band) async {
+    await _bandInsertionAdapter.insert(band, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> updateBand(Band band) async {
+    await _bandUpdateAdapter.update(band, OnConflictStrategy.abort);
   }
 }

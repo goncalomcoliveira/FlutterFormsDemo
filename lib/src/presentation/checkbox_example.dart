@@ -26,7 +26,7 @@ class _CheckboxExampleState extends State<CheckboxExample> {
             });
           },
         ),
-        const Text('Thomas Jefferson', style: textStyle),
+        const Text('Has released albums', style: textStyle),
       ],
     );
   }
