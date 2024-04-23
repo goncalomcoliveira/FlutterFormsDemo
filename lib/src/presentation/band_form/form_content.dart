@@ -58,6 +58,7 @@ class FormFields extends StatelessWidget {
     }
 
     List<String> genreItems = [
+      '',
       'Pop',
       'Rock',
       'Hip Hop',
