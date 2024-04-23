@@ -85,7 +85,7 @@ class _$BandDatabase extends BandDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Band` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Band` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `origin` TEXT NOT NULL, `genre` TEXT NOT NULL, `memberAmount` INTEGER NOT NULL, `isActive` INTEGER NOT NULL, `grammyState` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -107,13 +107,29 @@ class _$BandDao extends BandDao {
         _bandInsertionAdapter = InsertionAdapter(
             database,
             'Band',
-            (Band item) => <String, Object?>{'id': item.id, 'name': item.name},
+            (Band item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'origin': item.origin,
+                  'genre': item.genre,
+                  'memberAmount': item.memberAmount,
+                  'isActive': item.isActive ? 1 : 0,
+                  'grammyState': item.grammyState.index
+                },
             changeListener),
         _bandUpdateAdapter = UpdateAdapter(
             database,
             'Band',
             ['id'],
-            (Band item) => <String, Object?>{'id': item.id, 'name': item.name},
+            (Band item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'origin': item.origin,
+                  'genre': item.genre,
+                  'memberAmount': item.memberAmount,
+                  'isActive': item.isActive ? 1 : 0,
+                  'grammyState': item.grammyState.index
+                },
             changeListener);
 
   final sqflite.DatabaseExecutor database;
@@ -129,15 +145,27 @@ class _$BandDao extends BandDao {
   @override
   Future<List<Band>> findAllBands() async {
     return _queryAdapter.queryList('SELECT * FROM Band',
-        mapper: (Map<String, Object?> row) =>
-            Band(row['id'] as int, row['name'] as String));
+        mapper: (Map<String, Object?> row) => Band(
+            row['id'] as int?,
+            row['name'] as String,
+            row['origin'] as String,
+            row['genre'] as String,
+            row['memberAmount'] as int,
+            (row['isActive'] as int) != 0,
+            GrammyState.values[row['grammyState'] as int]));
   }
 
   @override
   Stream<Band?> findBandById(int id) {
     return _queryAdapter.queryStream('SELECT * FROM Band WHERE id = ?1',
-        mapper: (Map<String, Object?> row) =>
-            Band(row['id'] as int, row['name'] as String),
+        mapper: (Map<String, Object?> row) => Band(
+            row['id'] as int?,
+            row['name'] as String,
+            row['origin'] as String,
+            row['genre'] as String,
+            row['memberAmount'] as int,
+            (row['isActive'] as int) != 0,
+            GrammyState.values[row['grammyState'] as int]),
         arguments: [id],
         queryableName: 'Band',
         isView: false);

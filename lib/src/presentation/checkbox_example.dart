@@ -1,33 +1,41 @@
 import 'package:flutter/material.dart';
 
-class CheckboxExample extends StatefulWidget {
-  const CheckboxExample({super.key});
+import '../../main.dart';
 
-  @override
-  State<CheckboxExample> createState() => _CheckboxExampleState();
-}
+class CheckboxExample extends StatelessWidget {
+  const CheckboxExample(this.appState, {super.key});
 
-class _CheckboxExampleState extends State<CheckboxExample> {
-  bool isChecked = false;
+  final MyFormState appState;
 
   @override
   Widget build(BuildContext context) {
-
     const textStyle = TextStyle(fontSize: 16);
 
     return Row(
       children: [
-        Checkbox(
-          checkColor: Colors.white,
-          value: isChecked,
-          onChanged: (bool? value) {
-            setState(() {
-              isChecked = value!;
-            });
+        CheckboxFormField(
+          initialValue: appState.band.isActive,
+          onSaved: (value) {
+            appState.band.isActive = value!;
           },
         ),
-        const Text('Has released albums', style: textStyle),
+        const Text('Is Active', style: textStyle),
       ],
     );
   }
+}
+
+class CheckboxFormField extends FormField<bool> {
+  CheckboxFormField(
+      {super.key,
+      super.onSaved,
+      super.validator,
+      bool super.initialValue = false,
+      bool autovalidate = false})
+      : super(builder: (FormFieldState<bool> state) {
+          return Checkbox(
+            value: state.value,
+            onChanged: state.didChange,
+          );
+        });
 }

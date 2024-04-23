@@ -1,46 +1,73 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_forms_demo/src/domain/band.dart';
+import 'package:flutter_forms_demo/src/utils/Utils.dart';
 
-enum SingingCharacter { lafayette, jefferson }
+import '../../main.dart';
 
-class RadioExample extends StatefulWidget {
-  const RadioExample({super.key});
+class RadioExample extends StatelessWidget {
+  const RadioExample(this.appState, {super.key});
 
-  @override
-  State<RadioExample> createState() => _RadioExampleState();
-}
-
-class _RadioExampleState extends State<RadioExample> {
-
-  SingingCharacter? _character = SingingCharacter.lafayette;
+  final MyFormState appState;
 
   @override
   Widget build(BuildContext context) {
 
-    const textStyle = TextStyle(fontSize: 16);
+    const titleStyle = TextStyle(fontSize: 12);
 
-    return Row(
-      children: <Widget>[
-        Radio<SingingCharacter>(
-          value: SingingCharacter.lafayette,
-          groupValue: _character,
-          onChanged: (SingingCharacter? value) {
-            setState(() {
-              _character = value;
-            });
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Grammy Recognition', style: titleStyle),
+        DynamicRadioGroupFormField(
+          initialValue: appState.band.grammyState,
+          onSave: (value) {
+            appState.band.grammyState = value!;
           },
         ),
-        const Text('Lafayette', style: textStyle),
-        Radio<SingingCharacter>(
-          value: SingingCharacter.jefferson,
-          groupValue: _character,
-          onChanged: (SingingCharacter? value) {
-            setState(() {
-              _character = value;
-            });
-          },
-        ),
-        const Text('Thomas Jefferson', style: textStyle),
       ],
     );
   }
+}
+
+class DynamicRadioGroupFormField extends FormField<GrammyState> {
+  DynamicRadioGroupFormField({
+    super.key,
+    FormFieldSetter<GrammyState>? onSave,
+    GrammyState? initialValue,
+    super.validator,
+    AutovalidateMode super.autovalidateMode = AutovalidateMode.disabled,
+  }) : super(
+    initialValue: initialValue ?? GrammyState.notNominated,
+    onSaved: onSave,
+    builder: (FormFieldState<GrammyState> field) {
+      final List<Widget> radioButtons = [];
+
+      const List<GrammyState> options = GrammyState.values;
+
+      const titleStyle = TextStyle(fontSize: 16);
+
+      for (final option in options) {
+        radioButtons.add(
+          Row(
+            children: [
+              Radio<GrammyState>(
+                value: option,
+                groupValue: field.value,
+                onChanged: (GrammyState? value) {
+                  field.didChange(value);
+                },
+              ),
+              Text(option.name, style: titleStyle),
+            ],
+          ),
+        );
+      }
+
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: radioButtons,
+      );
+    },
+  );
 }

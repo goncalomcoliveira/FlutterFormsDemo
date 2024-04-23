@@ -14,13 +14,23 @@ class FormCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyFormState>();
+    var titleStyle = TextStyle(
+        fontSize: 32,
+        color: Colors.teal.shade900,
+        fontWeight: FontWeight.bold,
+    );
 
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(36.0),
         child: Column(
           children: [
+            Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Band Form', style: titleStyle)
+            ),
             const FormContent(),
+            const SizedBox(height: 24),
             ElevatedButton(
               style: style,
               onPressed: () {

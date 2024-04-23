@@ -12,7 +12,7 @@ class BandRepository {
       return bands.first;
     } else {
       // Instantiate an empty Band object
-      return Band(0, '');
+      return Band.empty();
     }
   }
 

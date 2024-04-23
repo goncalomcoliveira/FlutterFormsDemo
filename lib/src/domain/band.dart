@@ -3,10 +3,61 @@ import 'package:floor/floor.dart';
 @entity
 class Band {
   @PrimaryKey(autoGenerate: true)
-  final int id;
+  int? id;
 
   @ColumnInfo(name: 'name')
   String name;
 
-  Band(this.id, this.name);
+  @ColumnInfo(name: 'origin')
+  String origin;
+
+  @ColumnInfo(name: 'genre')
+  String genre;
+
+  @ColumnInfo(name: 'memberAmount')
+  int memberAmount;
+
+  @ColumnInfo(name: 'isActive')
+  bool isActive;
+
+  @ColumnInfo(name: 'grammyState')
+  GrammyState grammyState;
+
+  Band(
+    this.id,
+    this.name,
+    this.origin,
+    this.genre,
+    this.memberAmount,
+    this.isActive,
+    this.grammyState,
+  );
+
+  Band.empty()
+      : name = '',
+        origin = '',
+        genre = '',
+        memberAmount = 0,
+        isActive = false,
+        grammyState = GrammyState.notNominated;
+
+  @override
+  String toString() {
+    return 'Band{id: $id, name: $name, origin: $origin, genre: $genre, memberAmount: $memberAmount, isActive: $isActive, grammyState: $grammyState}';
+  }
+}
+
+enum GrammyState { notNominated, nominated, winner }
+
+extension GrammyExtension on GrammyState {
+  String get name {
+    switch (this) {
+      case GrammyState.winner:
+        return 'Winner';
+      case GrammyState.nominated:
+        return 'Nominated';
+      case GrammyState.notNominated:
+        return 'Not Nominated';
+    }
+  }
 }

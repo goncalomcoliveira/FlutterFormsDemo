@@ -45,7 +45,7 @@ class MyFormApp extends StatelessWidget {
 
 class MyFormState extends ChangeNotifier {
   final BandRepository repository;
-  Band band = Band(0, '');
+  Band band = Band.empty();
   bool isNewBand = false;
 
   MyFormState({required this.repository});
