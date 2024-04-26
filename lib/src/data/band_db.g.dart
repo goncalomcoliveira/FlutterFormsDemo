@@ -85,7 +85,7 @@ class _$BandDatabase extends BandDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Band` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `origin` TEXT NOT NULL, `genre` TEXT NOT NULL, `memberAmount` INTEGER NOT NULL, `isActive` INTEGER NOT NULL, `grammyState` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Band` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `origin` TEXT NOT NULL, `genre` TEXT NOT NULL, `memberAmount` INTEGER NOT NULL, `isActive` INTEGER NOT NULL, `grammyState` INTEGER NOT NULL, `imagePath` TEXT NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -114,7 +114,8 @@ class _$BandDao extends BandDao {
                   'genre': item.genre,
                   'memberAmount': item.memberAmount,
                   'isActive': item.isActive ? 1 : 0,
-                  'grammyState': item.grammyState.index
+                  'grammyState': item.grammyState.index,
+                  'imagePath': item.imagePath
                 },
             changeListener),
         _bandUpdateAdapter = UpdateAdapter(
@@ -128,7 +129,8 @@ class _$BandDao extends BandDao {
                   'genre': item.genre,
                   'memberAmount': item.memberAmount,
                   'isActive': item.isActive ? 1 : 0,
-                  'grammyState': item.grammyState.index
+                  'grammyState': item.grammyState.index,
+                  'imagePath': item.imagePath
                 },
             changeListener);
 
@@ -152,7 +154,8 @@ class _$BandDao extends BandDao {
             row['genre'] as String,
             row['memberAmount'] as int,
             (row['isActive'] as int) != 0,
-            GrammyState.values[row['grammyState'] as int]));
+            GrammyState.values[row['grammyState'] as int],
+            row['imagePath'] as String));
   }
 
   @override
@@ -165,7 +168,8 @@ class _$BandDao extends BandDao {
             row['genre'] as String,
             row['memberAmount'] as int,
             (row['isActive'] as int) != 0,
-            GrammyState.values[row['grammyState'] as int]),
+            GrammyState.values[row['grammyState'] as int],
+            row['imagePath'] as String),
         arguments: [id],
         queryableName: 'Band',
         isView: false);

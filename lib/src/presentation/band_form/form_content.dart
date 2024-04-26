@@ -1,8 +1,12 @@
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_forms_demo/src/presentation/radio_example.dart';
 
 import '../../../main.dart';
+import '../camera_view/take_picture.dart';
 import '../checkbox_example.dart';
 
 class FormContent extends StatelessWidget {
@@ -192,6 +196,61 @@ class FormFields extends StatelessWidget {
           children: [
             CheckboxExample(appState),
           ],
+        ),
+        const SizedBox(height: 24),
+        Container(
+          alignment: Alignment.center,
+          height: 600,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Scaffold(
+                  body: Builder(
+                    builder: (context) {
+                      if (appState.band.imagePath.isNotEmpty) {
+                        return Image.file(File(appState.band.imagePath), height: 600, width: 600,);
+                      }
+                      return Container(color: Colors.grey.shade300);
+                    }),
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () async {
+                      try {
+
+                        if (appState.bandFormKey.currentState!.validate()) {
+                          appState.bandFormKey.currentState!.save();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Processing Data')),
+                          );
+                          appState.saveData();
+
+                          WidgetsFlutterBinding.ensureInitialized();
+
+                          final cameras = await availableCameras();
+                          final firstCamera = cameras.first;
+
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => TakePictureScreen(
+                                  camera: firstCamera,
+                                  band: appState.band
+                              ),
+                            ),
+                          );
+                        }
+
+                      } catch (e) {
+                        // If an error occurs, log the error to the console.
+                        print(e);
+                      }
+                    },
+                    child: const Icon(Icons.camera_alt),
+                  ),
+                  floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

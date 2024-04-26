@@ -16,6 +16,16 @@ class BandRepository {
     }
   }
 
+  Future<Band?> getFirstBandOrNull() async {
+    final bands = await bandDao.findAllBands();
+    if (bands.isNotEmpty) {
+      return bands.first;
+    } else {
+      // Instantiate an empty Band object
+      return null;
+    }
+  }
+
   Future<void> addBand(Band band) async {
     await bandDao.insertBand(band);
   }

@@ -23,15 +23,11 @@ class Band {
   @ColumnInfo(name: 'grammyState')
   GrammyState grammyState;
 
-  Band(
-    this.id,
-    this.name,
-    this.origin,
-    this.genre,
-    this.memberAmount,
-    this.isActive,
-    this.grammyState,
-  );
+  @ColumnInfo(name: 'imagePath')
+  String imagePath;
+
+  Band(this.id, this.name, this.origin, this.genre, this.memberAmount,
+      this.isActive, this.grammyState, this.imagePath);
 
   Band.empty()
       : name = '',
@@ -39,11 +35,12 @@ class Band {
         genre = '',
         memberAmount = 0,
         isActive = false,
-        grammyState = GrammyState.notNominated;
+        grammyState = GrammyState.notNominated,
+        imagePath = '';
 
   @override
   String toString() {
-    return 'Band{id: $id, name: $name, origin: $origin, genre: $genre, memberAmount: $memberAmount, isActive: $isActive, grammyState: $grammyState}';
+    return 'Band{id: $id, name: $name, origin: $origin, genre: $genre, memberAmount: $memberAmount, isActive: $isActive, grammyState: $grammyState, imagePath: $imagePath}';
   }
 }
 
