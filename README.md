@@ -1,16 +1,36 @@
-# flutter_forms_demo
+# Flutter Form Filling Demo
 
-An implementation of forms, camera integration and persistance with Flutter.
+This project is a simple Flutter application demonstrating dynamic form creation, input handling, and local data persistence.
 
-## Getting Started
+## About the Project
 
-This project is a starting point for a Flutter application.
+The app showcases how to build and manage forms with multiple input types, allowing users to fill in data and save it locally for later retrieval.
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+* Multiple form field types:
+  * Text fields
+  * Radio buttons
+  * Checkboxes
+  * (Easily extendable to other input types)
+* Form validation and input handling
+* Save form data locally
+* Retrieve and display previously saved data
+* Clean and responsive UI
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Data Persistence
+
+* Local database storage
+* Efficient saving and loading of user input
+
+## Built With
+
+* Flutter
+
+## Purpose
+
+This project was created as a demonstration of form handling and local data storage in Flutter applications, useful for learning and prototyping.
+
+---
+
+Feel free to explore, modify, and reuse this project!
